@@ -30,7 +30,22 @@ RSpec.describe "Merchant Endpoints" do
   end
 
   describe "get one merchant" do
+    it "lists out one merchant" do
+      merchant1 = create(:merchant)
+      merchant2 = create(:merchant)
 
+      get "/api/v1/merchants/#{merchant1.id}"
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      merchant_data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(merchant_data[:data]).to have_key(:id)
+      expect(merchant_data[:data][:id]).to be_a(String)
+      expect(merchant_data[:data][:attributes]).to have_key(:name)
+      expect(merchant_data[:data][:attributes][:name]).to be_a(String)
+    end
   end
 
   describe "get all items for a given merchant id" do
