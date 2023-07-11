@@ -2,19 +2,16 @@ FactoryBot.define do
   factory :customer do
     first_name {Faker::Name.first_name}
     last_name {Faker::Dessert.variety}
-    invoices
   end
 
   factory :invoice do
-    status {[packaged,returned,shipped].sample}
+    status {["packaged","returned","shipped"].sample}
     merchant
     customer
   end
 
   factory :merchant do
-    name {Faker::Space.galaxy}
-    invoices
-    items
+    name {Faker::Commerce.brand}
   end
 
   factory :item do
