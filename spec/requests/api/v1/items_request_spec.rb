@@ -119,4 +119,25 @@ RSpec.describe "Items Endpoints" do
       expect(created_item.merchant_id).to eq(item_params[:merchant_id])
     end
   end
+
+  describe "update an existing item" do
+    it "can update an item" do
+      merchant = create(:merchant)
+      item = create(:item, merchant_id: merchant.id)
+
+      item_params = { name: "New Widget Name",
+                      description: "High quality widget, now with more widgety-ness" }
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/items/#{item.id}"
+
+      updated_item = Item.find(id: item.id)
+
+      expect(response).to be_successful
+      expect(updated_item.name).to_not eq(item.name)
+      expect(updated_item.name).to eq("New Widget Name")
+      expect(updated_item.description).to eq("High quality widget, now with more widgety-ness")
+      expect(updated_item.description).to_not eq(item.description)
+    end
+  end
 end
