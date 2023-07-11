@@ -43,8 +43,11 @@ RSpec.describe "Merchant Endpoints" do
 
       expect(merchant_data[:data]).to have_key(:id)
       expect(merchant_data[:data][:id]).to be_a(String)
+      expect(merchant_data[:data][:id]).to eq(merchant1.id.to_s)
+      expect(merchant_data[:data][:id]).to_not eq(merchant2.id.to_s)
       expect(merchant_data[:data][:attributes]).to have_key(:name)
       expect(merchant_data[:data][:attributes][:name]).to be_a(String)
+      expect(merchant_data[:data][:attributes][:name]).to eq(merchant1.name)
     end
   end
 
