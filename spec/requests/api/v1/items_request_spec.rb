@@ -119,4 +119,53 @@ RSpec.describe "Items Endpoints" do
       expect(created_item.merchant_id).to eq(item_params[:merchant_id])
     end
   end
+
+  describe "update an existing item" do
+    it "can update an item" do
+      merchant = create(:merchant)
+      item = create(:item, merchant_id: merchant.id)
+
+      edit_item_params = { name: "New Widget Name",
+                      description: "High quality widget, now with more widgety-ness",
+                      unit_price: 299.99,
+                      merchant_id: merchant.id }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate({item: edit_item_params})
+
+      updated_item = Item.find_by(id: item.id)
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+      expect(updated_item.name).to eq("New Widget Name")
+      expect(updated_item.description).to eq("High quality widget, now with more widgety-ness")
+      expect(updated_item.unit_price).to eq(299.99)
+      expect(updated_item.merchant_id).to eq(merchant.id)
+      expect(updated_item.name).to_not eq(item.name)
+      expect(updated_item.description).to_not eq(item.description)
+      expect(updated_item.unit_price).to_not eq(item.unit_price)
+    end
+
+    it "updates items with only partial data too" do
+      merchant = create(:merchant)
+      item = create(:item, merchant_id: merchant.id)
+
+      edit_item_params = { name: "A Newer Widget Name" }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate({item: edit_item_params})
+
+      updated_item = Item.find_by(id: item.id)
+
+      expect(response).to be_successful
+      expect(updated_item.name).to eq("A Newer Widget Name")
+      expect(updated_item.name).to_not eq(item.name)
+    end
+
+    xit "edge case, bad merchant id returns 400 or 404" do
+
+    end
+  end
 end
