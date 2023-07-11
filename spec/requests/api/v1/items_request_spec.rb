@@ -79,6 +79,20 @@ RSpec.describe "Items Endpoints" do
       expect(item_info[:data][:attributes][:merchant_id]).to eq(item1.merchant_id)
       expect(item_info[:data][:attributes][:merchant_id]).to_not eq(item3.merchant_id)
     end
+
+    xit "sad path, bad integer id returns 404" do
+      get "/api/v1/items/8923987297"
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+    end
+
+    xit "sad path, string id returns 404" do
+      get "/api/v1/items/'99'"
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+    end
   end
 
   describe "creates one item" do
