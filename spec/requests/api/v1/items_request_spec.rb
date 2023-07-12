@@ -79,20 +79,6 @@ RSpec.describe "Items Endpoints" do
       expect(item_info[:data][:attributes][:merchant_id]).to eq(item1.merchant_id)
       expect(item_info[:data][:attributes][:merchant_id]).to_not eq(item3.merchant_id)
     end
-
-    xit "sad path, bad integer id returns 404" do
-      get "/api/v1/items/8923987297"
-
-      expect(response).to_not be_successful
-      expect(response.status).to eq(404)
-    end
-
-    xit "sad path, string id returns 404" do
-      get "/api/v1/items/'99'"
-
-      expect(response).to_not be_successful
-      expect(response.status).to eq(404)
-    end
   end
 
   describe "creates one item" do
@@ -125,10 +111,10 @@ RSpec.describe "Items Endpoints" do
       merchant = create(:merchant)
       item = create(:item, merchant_id: merchant.id)
 
-      edit_item_params = { name: "New Widget Name",
-                      description: "High quality widget, now with more widgety-ness",
-                      unit_price: 299.99,
-                      merchant_id: merchant.id }
+      edit_item_params = {  name: "New Widget Name",
+                            description: "High quality widget, now with more widgety-ness",
+                            unit_price: 299.99,
+                            merchant_id: merchant.id }
 
       headers = {"CONTENT_TYPE" => "application/json"}
 
@@ -163,10 +149,6 @@ RSpec.describe "Items Endpoints" do
       expect(updated_item.name).to eq("A Newer Widget Name")
       expect(updated_item.name).to_not eq(item.name)
     end
-
-    xit "edge case, bad merchant id returns 400 or 404" do
-
-    end
   end
 
   describe "destroy" do
@@ -181,6 +163,26 @@ RSpec.describe "Items Endpoints" do
       expect(response).to be_successful
       expect(Item.count).to eq(0)
       expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe "sad path & edge cases" do
+    xit "sad path, bad integer id returns 404" do
+      get "/api/v1/items/8923987297"
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+    end
+
+    xit "sad path, string id returns 404" do
+      get "/api/v1/items/'99'"
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+    end
+
+    xit "edge case, bad merchant id returns 400 or 404" do
+
     end
   end
 end
