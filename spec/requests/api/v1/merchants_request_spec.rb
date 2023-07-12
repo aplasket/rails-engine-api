@@ -49,7 +49,9 @@ RSpec.describe "Merchant Endpoints" do
       expect(merchant_data[:data][:attributes][:name]).to be_a(String)
       expect(merchant_data[:data][:attributes][:name]).to eq(merchant1.name)
     end
+  end
 
+  describe "sad path & edge cases" do
     xit "sad path, bad integer id returns 404" do
       get "/api/v1/merchants/8923987297"
 
