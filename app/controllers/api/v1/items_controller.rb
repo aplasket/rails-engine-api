@@ -1,5 +1,5 @@
 class Api::V1::ItemsController < ApplicationController
-  before_action :find_item, only: [:show, :update]
+  before_action :find_item, only: [:show, :update, :destroy]
 
   def index
     render json: ItemSerializer.new(Item.all)
@@ -16,6 +16,10 @@ class Api::V1::ItemsController < ApplicationController
   def update
     @item.update!(item_params)
     render json: ItemSerializer.new(@item)
+  end
+
+  def destroy
+    render json: @item.destroy
   end
 
   private
