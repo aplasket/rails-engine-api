@@ -94,7 +94,7 @@ RSpec.describe "/items/find_all" do
       expect(item_data[:data].count).to eq(5)
     end
 
-    it "it returns items between max and min price queries" do
+    it "returns items between max and min price queries" do
       query_params = {
         min_price: 4.99,
         max_price: 99.99
@@ -120,6 +120,8 @@ RSpec.describe "/items/find_all" do
 
       expect(response).to_not be_successful
       expect(response.status).to eq(400)
+      item_data = JSON.parse(response.body, symbolize_names: true)
+      expect(item_data).to have_key(:errors)
     end
 
     it "sad path, cannot send name and min price" do
@@ -132,6 +134,8 @@ RSpec.describe "/items/find_all" do
 
       expect(response).to_not be_successful
       expect(response.status).to eq(400)
+      item_data = JSON.parse(response.body, symbolize_names: true)
+      expect(item_data).to have_key(:errors)
     end
 
     it "sad path, cannot have min_price less than 0" do
@@ -143,6 +147,8 @@ RSpec.describe "/items/find_all" do
 
       expect(response).to_not be_successful
       expect(response.status).to eq(400)
+      item_data = JSON.parse(response.body, symbolize_names: true)
+      expect(item_data).to have_key(:errors)
     end
 
     it "sad path, cannot have max_price less than 0" do
@@ -154,6 +160,8 @@ RSpec.describe "/items/find_all" do
 
       expect(response).to_not be_successful
       expect(response.status).to eq(400)
+      item_data = JSON.parse(response.body, symbolize_names: true)
+      expect(item_data).to have_key(:errors)
     end
   end
 end

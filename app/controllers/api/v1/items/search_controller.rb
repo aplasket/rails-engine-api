@@ -5,7 +5,7 @@ class Api::V1::Items::SearchController < ApplicationController
     if items
       render json: ItemSerializer.new(items)
     else
-      render json: { error: 'Bad Request' }, status: 400
+      render json: { errors: 'Bad Request' }, status: 400
     end
   end
 end
