@@ -11,16 +11,6 @@ class Item < ApplicationRecord
     else
       false
     end
-
-    # if params[:name] && (params[:min_price] || params[:max_price])
-    #   "error - name cannot be searched with price queries"
-    # elsif params[:min_price].to_f.positive? || params[:max_price].to_f.positive?
-    #   Item.find_by_price(params)
-    # elsif params[:name]
-    #   Item.find_all_by_name(params)
-    # else
-    #   false
-    # end
   end
 
   def self.find_all_by_name(params)
