@@ -184,5 +184,35 @@ RSpec.describe "Items Endpoints" do
     xit "edge case, bad merchant id returns 400 or 404" do
 
     end
+
+    it "can destroy an item's invoice if it's only item on it" do
+      merchant = create(:merchant)
+      item = create(:item, merchant_id: merchant.id)
+      customer = create(:customer)
+      invoice = create(:invoice, merchant_id: merchant.id, customer_id: customer.id)
+      invoice_item = create(:invoice_item, item_id: item.id, invoice_id: invoice.id)
+
+      delete "/api/v1/items/#{item.id}"
+
+      expect(response).to be_successful
+      expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Invoice.find(invoice.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "cannot destroy an item's invoice if has more items on it" do
+      merchant = create(:merchant)
+      item = create(:item, merchant_id: merchant.id)
+      item2 = create(:item, merchant_id: merchant.id)
+      customer = create(:customer)
+      invoice = create(:invoice, merchant_id: merchant.id, customer_id: customer.id)
+      invoice_item = create(:invoice_item, item_id: item.id, invoice_id: invoice.id)
+      invoice_item2 = create(:invoice_item, item_id: item2.id, invoice_id: invoice.id)
+
+      delete "/api/v1/items/#{item.id}"
+
+      expect(response).to be_successful
+      expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Invoice.find(invoice.id)}.to_not raise_error(ActiveRecord::RecordNotFound)
+    end
   end
 end
