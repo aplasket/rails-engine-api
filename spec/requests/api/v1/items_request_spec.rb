@@ -167,22 +167,44 @@ RSpec.describe "Items Endpoints" do
   end
 
   describe "sad path & edge cases" do
-    xit "sad path, bad integer id returns 404" do
-      get "/api/v1/items/8923987297"
+    it "sad path, bad integer id returns 404" do
+      item_id = 8923987297
+
+      get "/api/v1/items/#{item_id}"
 
       expect(response).to_not be_successful
       expect(response.status).to eq(404)
+
+      expect{Item.find(item_id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
 
-    xit "sad path, string id returns 404" do
-      get "/api/v1/items/'99'"
+    it "sad path, string id returns 404" do
+      item_id = "99"
+      get "/api/v1/items/#{item_id}"
 
       expect(response).to_not be_successful
       expect(response.status).to eq(404)
+
+      expect{Item.find(item_id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
 
-    xit "edge case, bad merchant id returns 400 or 404" do
+    it "edge case, bad merchant id returns 400 or 404" do
+      merchant = create(:merchant)
+      item = create(:item, merchant_id: merchant.id)
 
+      edit_item_params = {  name: "New Widget Name",
+                            description: "High quality widget, now with more widgety-ness",
+                            unit_price: 299.99,
+                            merchant_id: 999999 }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate({item: edit_item_params})
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+      expect{item.update!(edit_item_params)}.to raise_error(ActiveRecord::RecordInvalid)
+      expect{Merchant.find(999999)}.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "can destroy an item's invoice if it's only item on it" do
