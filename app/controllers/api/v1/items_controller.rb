@@ -19,7 +19,8 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def destroy
-    render json: @item.destroy
+    @item.delete_invoice
+    @item.destroy
   end
 
   private
