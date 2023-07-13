@@ -49,11 +49,14 @@ RSpec.describe "Merchant Endpoints" do
       expect(merchant_data[:data][:attributes][:name]).to eq(merchant1.name)
     end
 
-    xit "sad path, bad integer id returns 404" do
-      get "/api/v1/merchants/8923987297"
+    it "sad path, bad integer id returns 404" do
+      merchant_id = 8923987297
+      get "/api/v1/merchants/#{merchant_id}"
 
       expect(response).to_not be_successful
       expect(response.status).to eq(404)
+
+      expect{Merchant.find(merchant_id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end
