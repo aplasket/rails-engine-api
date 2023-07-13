@@ -28,7 +28,8 @@ RSpec.describe Item do
       expect(Item.find_all(min_price: 4.99).count).to eq(5)
       expect(Item.find_all(max_price: 99.99).count).to eq(5)
       expect(Item.find_all(min_price: 4.99, max_price: 99.99).count).to eq(4)
-      expect(Item.find_all(name: "")).to eq("error - query is invalid, parameter cannot be empty")
+      expect(Item.find_all(name: "")).to eq("error - query is invalid")
+      # expect(Item.find_all(min_price: 0)).to eq("error - query is invalid")
     end
 
     it "#find_by_name" do

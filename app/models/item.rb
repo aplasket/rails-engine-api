@@ -6,12 +6,12 @@ class Item < ApplicationRecord
   def self.find_all(params)
     if params[:name] && (params[:min_price] || params[:max_price])
       "error - name cannot be searched with price queries"
-    elsif params[:min_price] || params[:max_price]
+    elsif params[:min_price].to_f.positive? || params[:max_price].to_f.positive?
       Item.find_by_price(params)
     elsif !params[:name].empty?
       Item.find_all_by_name(params[:name])
     else
-      "error - query is invalid, parameter cannot be empty"
+      "error - query is invalid"
     end
   end
 
