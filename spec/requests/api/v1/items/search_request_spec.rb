@@ -41,7 +41,7 @@ RSpec.describe "/items/find_all" do
       expect(item[:attributes][:name]).to eq(@item1.name)
     end
 
-    xit "sad path, no fragment matched" do
+    it "sad path, no fragment matched" do
       query_params = {
         name: "nomatch"
       }
@@ -50,6 +50,12 @@ RSpec.describe "/items/find_all" do
 
       expect(response).to be_successful
       expect(response.status).to eq(200)
+
+      item_data = JSON.parse(response.body, symbolize_names: true)
+    
+      expect(item_data).to have_key(:data)
+
+      expect(item_data[:data]).to eq([])
     end
 
     it "finds all items over a min price" do

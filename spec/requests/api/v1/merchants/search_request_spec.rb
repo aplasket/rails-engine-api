@@ -33,7 +33,7 @@ RSpec.describe "/merchants/find" do
       expect(merchants[:attributes][:name]).to_not eq(merchant2.name)
     end
 
-    xit "sad path, no fragment matched" do
+    it "sad path, no fragment matched" do
       query_params = {
         name: "nomatch"
       }
@@ -42,6 +42,12 @@ RSpec.describe "/merchants/find" do
 
       expect(response).to be_successful
       expect(response.status).to eq(200)
+
+      merchant_data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(merchant_data).to have_key(:data)
+
+      expect(merchant_data[:data]).to eq([])
     end
   end
 end
