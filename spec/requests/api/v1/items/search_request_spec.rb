@@ -79,7 +79,7 @@ RSpec.describe "/items/find_all" do
       expect(item[:attributes][:name]).to eq(@item2.name)
     end
 
-    it "finds al items under a max price" do
+    it "finds all items under a max price" do
       query_params = {
         max_price: 99.99
       }
@@ -108,6 +108,56 @@ RSpec.describe "/items/find_all" do
       item_data = JSON.parse(response.body, symbolize_names: true)
       expect(item_data).to have_key(:data)
       expect(item_data[:data].count).to eq(4)
+    end
+
+    it "sad path, cannot send name and max price" do
+      query_params = {
+        name: "adidas",
+        min_price: 4.99
+      }
+
+      get "/api/v1/items/find_all", params: query_params
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+      item_data = JSON.parse(response.body, symbolize_names: true)
+      binding.pry
+    end
+
+    xit "sad path, cannot send name and min price" do
+      query_params = {
+        name: "adidas",
+        max_price: 99.99
+      }
+
+      get "/api/v1/items/find_all", params: query_params
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+      item_data = JSON.parse(response.body, symbolize_names: true)
+      binding.pry
+    end
+
+    xit "sad path, cannot have min_price less than 0" do
+      query_params = {
+        min_price: -1
+      }
+
+      get "/api/v1/items/find_all", params: query_params
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+    end
+
+    xit "sad path, cannot have max_price less than 0" do
+      query_params = {
+        max_price: -1
+      }
+
+      get "/api/v1/items/find_all", params: query_params
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
     end
   end
 end
