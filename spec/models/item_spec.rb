@@ -23,18 +23,19 @@ RSpec.describe Item do
 
     it "#finds_all" do
       expect(Item.find_all(name: "paint").count).to eq(6)
-      expect(Item.find_all(name: "paint", min_price: 4.99)).to eq("error - name cannot be searched with price queries")
-      expect(Item.find_all(name: "paint", min_price: 4.99, max_price: 99.99)).to eq("error - name cannot be searched with price queries")
+      expect(Item.find_all(name: "paint", min_price: 4.99)).to eq(false)
+      expect(Item.find_all(name: "paint", min_price: 4.99, max_price: 99.99)).to eq(false)
       expect(Item.find_all(min_price: 4.99).count).to eq(5)
       expect(Item.find_all(max_price: 99.99).count).to eq(5)
       expect(Item.find_all(min_price: 4.99, max_price: 99.99).count).to eq(4)
-      expect(Item.find_all(name: "")).to eq("error - query is invalid")
-      # expect(Item.find_all(min_price: 0)).to eq("error - query is invalid")
+      expect(Item.find_all(name: "")).to eq(false)
+      expect(Item.find_all(min_price: -2)).to eq(false)
+      expect(Item.find_all(max_price: -1)).to eq(false)
     end
 
     it "#find_by_name" do
-      expect(Item.find_all_by_name("paint").count).to eq(6)
-      expect(Item.find_all_by_name("paint")[0]).to eq(@item1)
+      expect(Item.find_all_by_name(name: "paint").count).to eq(6)
+      expect(Item.find_all_by_name(name: "paint")[0]).to eq(@item1)
     end
 
     it "#find by price" do

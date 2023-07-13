@@ -120,11 +120,9 @@ RSpec.describe "/items/find_all" do
 
       expect(response).to_not be_successful
       expect(response.status).to eq(400)
-      item_data = JSON.parse(response.body, symbolize_names: true)
-      binding.pry
     end
 
-    xit "sad path, cannot send name and min price" do
+    it "sad path, cannot send name and min price" do
       query_params = {
         name: "adidas",
         max_price: 99.99
@@ -134,11 +132,9 @@ RSpec.describe "/items/find_all" do
 
       expect(response).to_not be_successful
       expect(response.status).to eq(400)
-      item_data = JSON.parse(response.body, symbolize_names: true)
-      binding.pry
     end
 
-    xit "sad path, cannot have min_price less than 0" do
+    it "sad path, cannot have min_price less than 0" do
       query_params = {
         min_price: -1
       }
@@ -149,7 +145,7 @@ RSpec.describe "/items/find_all" do
       expect(response.status).to eq(400)
     end
 
-    xit "sad path, cannot have max_price less than 0" do
+    it "sad path, cannot have max_price less than 0" do
       query_params = {
         max_price: -1
       }
