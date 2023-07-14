@@ -82,11 +82,11 @@ RSpec.describe Item do
       @item3.delete_invoice
       expect(@item3.invoices).to eq([@invoice2])
       expect(@invoice2.items.count).to eq(2)
-      expect{Invoice.find(@invoice2.id)}.to_not raise_error(ActiveRecord::RecordNotFound)
+      expect{Invoice.find(@invoice2.id)}.to_not raise_error
 
       expect(@item2.invoices).to eq([@invoice2, @invoice3])
       @item2.delete_invoice
-      expect{Invoice.find(@invoice2.id)}.to_not raise_error(ActiveRecord::RecordNotFound)
+      expect{Invoice.find(@invoice2.id)}.to_not raise_error
       expect{Invoice.find(@invoice3.id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end

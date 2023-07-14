@@ -234,7 +234,7 @@ RSpec.describe "Items Endpoints" do
 
       expect(response).to be_successful
       expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{Invoice.find(invoice.id)}.to_not raise_error(ActiveRecord::RecordNotFound)
+      expect{Invoice.find(invoice.id)}.to_not raise_error
     end
   end
 end
