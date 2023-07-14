@@ -16,21 +16,22 @@ RSpec.describe "/merchants/find" do
       expect(response.status).to eq(200)
 
       merchant_data = JSON.parse(response.body, symbolize_names: true)
+    
       expect(merchant_data).to have_key(:data)
       expect(merchant_data.count).to eq(1)
+      expect(merchant_data).to be_a(Hash)
 
-      merchants = merchant_data[:data]
+      merchant = merchant_data[:data]
+      expect(merchant).to be_a(Hash)
 
-      expect(merchants).to be_a(Hash)
+      expect(merchant).to have_key(:id)
+      expect(merchant[:id]).to eq(merchant1.id.to_s)
+      expect(merchant[:id]).to_not eq(merchant2.id.to_s)
 
-      expect(merchants).to have_key(:id)
-      expect(merchants[:id]).to eq(merchant1.id.to_s)
-      expect(merchants[:id]).to_not eq(merchant2.id.to_s)
-
-      expect(merchants).to have_key(:attributes)
-      expect(merchants[:attributes]).to have_key(:name)
-      expect(merchants[:attributes][:name]).to eq(merchant1.name)
-      expect(merchants[:attributes][:name]).to_not eq(merchant2.name)
+      expect(merchant).to have_key(:attributes)
+      expect(merchant[:attributes]).to have_key(:name)
+      expect(merchant[:attributes][:name]).to eq(merchant1.name)
+      expect(merchant[:attributes][:name]).to_not eq(merchant2.name)
     end
 
     it "sad path, no fragment matched" do
@@ -47,7 +48,7 @@ RSpec.describe "/merchants/find" do
 
       expect(merchant_data).to have_key(:data)
 
-      expect(merchant_data[:data]).to eq([])
+      expect(merchant_data[:data][:id]).to eq(nil)
     end
   end
 end
