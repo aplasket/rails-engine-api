@@ -1,5 +1,5 @@
 class Api::V1::Merchants::SearchController < ApplicationController
-  def index
+  def show
     merchant_name = Merchant.find_by_name(params[:name]).first
 
     if merchant_name
