@@ -34,11 +34,31 @@ class Item < ApplicationRecord
 
   def delete_invoice
     item_invoices = self.invoices
-  
+
     item_invoices.each do |invoice|
       if invoice.items.count <= 1
         invoice.destroy
       end
     end
+
+      # binding.pry
+      # item = Item.find(self.id)
+      # Invoice.joins(:invoice_items)
+      # .where(invoice_items: {item_id: item.id})
+      # .select("invoices.*, COUNT(invoice_items.item_id)")
+      # .group(:id)
+      # .having("COUNT(invoice_items.item_id) <= 1")
+      # .destroy
+
+      # # item.invoices.joins(:invoice_items)
+      # #     .select("COUNT(invoice_items.item_id)")
+      # #     .group(:id)
+      # #     .having("COUNT(invoice_items.item_id) <= 1")
+      # binding.pry
+
+      # Invoice.left_joins(:invoice_items)
+      # .group(:id)
+      # .having('COUNT(invoice_items.id) <= 1')
+      # # .destroy_all
   end
 end
