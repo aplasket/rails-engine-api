@@ -16,7 +16,7 @@ RSpec.describe "/merchants/find" do
       expect(response.status).to eq(200)
 
       merchant_data = JSON.parse(response.body, symbolize_names: true)
-    
+
       expect(merchant_data).to have_key(:data)
       expect(merchant_data.count).to eq(1)
       expect(merchant_data).to be_a(Hash)
@@ -49,6 +49,18 @@ RSpec.describe "/merchants/find" do
       expect(merchant_data).to have_key(:data)
 
       expect(merchant_data[:data][:id]).to eq(nil)
+    end
+  end
+
+  describe "GET /api/v1/revenue/merchants?quantity=x" do
+    xit "returns the revenue of X merchants" do
+      get "/api/v1/revenue/merchants", params: { quantity: 3}
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      json = JSON.parse(response.body, symbolize_names: true)
+      expect(json).to have_key(:data)
     end
   end
 end

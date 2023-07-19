@@ -17,5 +17,9 @@ RSpec.describe Merchant do
 
       expect(Merchant.find_by_name("ring")).to eq([merchant1, merchant2])
     end
+
+    xit ".top_merchants_by_revenue(qty)" do
+      
+    end
   end
 end
